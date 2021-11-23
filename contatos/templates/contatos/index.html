@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block 'contatos-content'%}
+{% block 'page-content'%}
     <h1 class="mt-5">Minha agenda</h1>
 
     <table class="table">
@@ -16,7 +16,7 @@
         {% for contato in contatos %}
             <tr>
             <td>
-                <a href="#"> {{ contato.nome }}</a>
+                <a href="{% url 'detalhes' contato.id %}"> {{ contato.nome }}</a>
             </td>
             <td>{{ contato.sobrenome }}</td>
             <td>{{ contato.telefone }}</td>
