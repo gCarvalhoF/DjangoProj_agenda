@@ -9,7 +9,7 @@ class ContatoAdmin(admin.ModelAdmin):
     # list_filter = ('nome', 'sobrenome')
     list_per_page = 10
     search_fields = ('nome', 'sobrenome', 'telefone')
-    list_editable = ('telefone', 'mostrar')
+    list_editable = ('telefone', 'mostrar', 'categoria')
 
 
 admin.site.register(Categoria)
