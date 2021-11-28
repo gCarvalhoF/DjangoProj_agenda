@@ -41,7 +41,7 @@ def search(request):
         messages.add_message(
             request,
             messages.ERROR,
-            'Campo termo não pode ficar vazio.'
+            'Campo de pesquisa não pode estar vazio.'
         )
         return redirect('index')
 

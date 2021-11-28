@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block 'page-content' %}
+{% include 'partials/_messages.html' %}
+<div class="center-block">
+    <h1 class="mt-5 mb-1">Olá, {{ user.first_name }} {{ user.last_name }}</h1>
+    <p>{{user}} - Nome de usuário </p>
+    <a class="btn btn-primary" href="{% url 'logout' %}">Deslogar</a>
+</div>
+{% endblock %}
