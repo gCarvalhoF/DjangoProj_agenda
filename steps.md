@@ -1,0 +1,3 @@
+- [ ] Atribuir Contatos a um usuário específico
+- [ ] Fazer a agenda precisar de login
+- [ ] Renderizar somente os contatos daquele usuário.

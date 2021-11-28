@@ -3,6 +3,7 @@ from django.contrib import messages, auth
 from django.core.validators import validate_email
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from .models import ContatoForm
 import re
 
 
@@ -50,8 +51,6 @@ def logout(request):
 
 def register(request):
     if request.method != 'POST':
-        messages.info(request, 'Nada foi postado')
-
         return render(request, 'accounts/register.html')
 
     email = request.POST.get('email')
@@ -100,4 +99,22 @@ def register(request):
 
 @login_required(redirect_field_name='login')
 def dashboard(request):
-    return render(request, 'accounts/dashboard.html')
+    if request.method != 'POST':
+        form = ContatoForm
+
+        return render(request, 'accounts/dashboard.html', {
+            'form': form
+        })
+
+    form = ContatoForm(request.POST, request.FILES)
+
+    if not form.is_valid():
+        messages.error(
+            request, 'Erro ao enviar o formulário. Verifique se tudo está preenchido corretamente.')
+        form = ContatoForm(request.POST)
+
+        return render(request, 'accounts/dashboard.html', {'form': form})
+    
+    form.save()
+    messages.success(request, 'Contato criado com sucesso!')
+    return redirect('dashboard')
