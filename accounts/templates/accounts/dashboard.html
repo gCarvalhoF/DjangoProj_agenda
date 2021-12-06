@@ -13,22 +13,45 @@
     </h1>
     </div>
 
-    <div class="container">
-    <form
-        method="post"
-        enctype="multipart/form-data"
-        action="{% url 'dashboard' %}"
-    >
-        <table class="table">
-            {% csrf_token %}
-            {{form}}
+    <div class="container mb-8">
+        <h2>Adicionar Contatos</h2>
+        <form
+            method="post"
+            enctype="multipart/form-data"
+            action="{% url 'create-contact' %}"
+        >
+            <table class="table">
+                {% csrf_token %}
+                {{form_contato}}
 
-            <tr>
-                <td>
-                <button type="submit" class="btn btn-primary">Salvar novo contato</button>
-                </td>
-            </tr>
-        </table>
-    </form>
+                <tr>
+                    <td>
+                    <button type="submit" name="contato" class="btn btn-primary">Salvar novo contato</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
     </div>
+
+    <br>
+
+    <div class="container">
+        <h2>Criar Categoria</h2>
+        <form 
+              method="post" 
+              enctype="multipart/form-data"
+              action="{% url 'create-category' %}">
+            <table class="table">
+                {% csrf_token %}
+                {{form_categoria}}
+    
+                <tr>
+                    <td>
+                        <button type="submit" name="categoria" class="btn btn-primary">Criar nova categoria</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    
 {% endblock %}

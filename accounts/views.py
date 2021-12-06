@@ -3,7 +3,8 @@ from django.contrib import messages, auth
 from django.core.validators import validate_email
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from .models import ContatoForm
+from .models import ContatoForm, CategoriaForm
+from contatos.models import Contato
 import re
 
 
@@ -100,21 +101,52 @@ def register(request):
 @login_required(redirect_field_name='login')
 def dashboard(request):
     if request.method != 'POST':
-        form = ContatoForm
+        form_contato = ContatoForm(user=request.user)
+        form_categoria = CategoriaForm
 
-        return render(request, 'accounts/dashboard.html', {
-            'form': form
-        })
+        return render(request, 'accounts/dashboard.html', {'form_contato': form_contato, 'form_categoria': form_categoria})
 
-    form = ContatoForm(request.POST, request.FILES)
 
-    if not form.is_valid():
-        messages.error(
-            request, 'Erro ao enviar o formulário. Verifique se tudo está preenchido corretamente.')
-        form = ContatoForm(request.POST)
+@login_required(redirect_field_name='login')
+def create_contact(request):
+    if request.method == 'POST':
+        form_contato = ContatoForm
+        form_contato = ContatoForm(
+            request.POST, request.FILES, user=request.user)
+        if "contato" in request.POST and form_contato.is_valid():
+            contact = form_contato.save(commit=False)
+            contact.created_by = contact.user = request.user
 
-        return render(request, 'accounts/dashboard.html', {'form': form})
-    
-    form.save()
-    messages.success(request, 'Contato criado com sucesso!')
-    return redirect('dashboard')
+            form_contato.save()
+
+            messages.success(request, 'Contato criado com sucesso!')
+            return redirect('dashboard')
+
+        else:
+            messages.error(
+                request, 'Erro ao enviar o formulário. Verifique se tudo está preenchido corretamente.')
+            form = ContatoForm(request.POST)
+
+            return render(request, 'accounts/dashboard.html', {'form_contato': form})
+
+
+@login_required(redirect_field_name='login')
+def create_category(request):
+    if request.method == 'POST':
+        form_categoria = CategoriaForm
+        form_categoria = CategoriaForm(
+            request.POST, initial={'created_by': request.user})
+
+        if "categoria" in request.POST and form_categoria.is_valid():
+            category = form_categoria.save(commit=False)
+            category.created_by = request.user
+
+            form_categoria.save()
+            messages.success(request, 'Categoria criada com sucesso!')
+            return redirect('dashboard')
+        else:
+            messages.error(
+                request, 'Erro ao enviar o formulário. Verifique se tudo está preenchido corretamente.')
+            form = CategoriaForm(request.POST)
+
+            return render(request, 'accounts/dashboard.html', {'form_categoria': form})
