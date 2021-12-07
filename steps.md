@@ -1,4 +1,4 @@
-- [ ] Atribuir Contatos a um usuário específico
-- [ ] Fazer a agenda precisar de login
-- [ ] Renderizar somente os contatos daquele usuário.
+- [x] Atribuir Contatos a um usuário específico
+- [x] Fazer a agenda precisar de login
+- [x] Renderizar somente os contatos daquele usuário.
 - [ ] Adicionar possibilidade de editar contatos a partir da página de detalhes
