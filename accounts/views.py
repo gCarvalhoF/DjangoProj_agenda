@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from .models import ContatoForm, CategoriaForm
 from contatos.models import Contato
+from django.http import Http404
+
 import re
 
 
@@ -110,7 +112,6 @@ def dashboard(request):
 @login_required(redirect_field_name='login')
 def create_contact(request):
     if request.method == 'POST':
-        form_contato = ContatoForm
         form_contato = ContatoForm(
             request.POST, request.FILES, user=request.user)
         if "contato" in request.POST and form_contato.is_valid():

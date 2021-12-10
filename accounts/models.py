@@ -6,7 +6,7 @@ from django import forms
 class ContatoForm(forms.ModelForm):
     class Meta:
         model = Contato
-        exclude = ('created_by',)
+        exclude = ('created_by', 'data_criacao')
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
@@ -15,8 +15,8 @@ class ContatoForm(forms.ModelForm):
         category_choices = list(Categoria.objects.filter(
             created_by=self.user))
 
-        self.fields['categoria'] = forms.ChoiceField(
-            choices=[(c.id, c.nome) for c in category_choices])
+        self.fields['categoria'] = forms.ModelChoiceField(Categoria.objects.filter(
+            created_by=self.user))
 
 
 class CategoriaForm(forms.ModelForm):

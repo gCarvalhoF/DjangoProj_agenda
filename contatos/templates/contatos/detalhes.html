@@ -1,30 +1,56 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
 
-{% block 'title'%} {{contato.nome}} {{contato.sobrenome}} | Detalhes {% endblock %}
+{% block 'title'%} {{contato.nome}} {{contato.sobrenome}} | {%if form %} Editar {% else %} Detalhes {% endif %}{% endblock %}
 
 {% block 'page-content' %}
-  {% if contato.foto%}
-    <img src="./media/{{contato.foto}}" style="height: 150px; margin-top: 20px">
+
+  {% if form %}
+
+    <h1>{{contato.nome }} {{ contato.sobrenome }}</h1>
+
+    <form method="post" enctype="multipart/form-data" action="{% url 'edit-contact' contato.id %}">
+      <table class="table">
+        {% csrf_token %}
+        {{form}}
+
+        <tr>
+          <td>
+            <button type="submit" method="POST" name="categoria" class="btn btn-primary">Editar</button>
+          </td>
+        </tr>
+      </table>
+    </form>
+
+  {% else %}
+
+    {% if contato.foto%}
+    <img src="./media/{{contato.foto}}" style="height: 150px; margin-top: 20px" />
+    {% endif %}
+
+    <h1 class="mt-5" style="margin-top: 15px !important">
+      {{ contato.nome }} {{ contato.sobrenome }}
+    </h1>
+    <dl>
+      <dt>Telefone</dt>
+      <dd>{{ contato.telefone }}</dd>
+
+      <dt>E-mail</dt>
+      <dd>{{ contato.email }}</dd>
+
+      <dt>Data criação</dt>
+      <dd>{{ contato.data_criacao|date:'d/m/y H:i:s' }}</dd>
+
+      <dt>Categoria</dt>
+      <dd>{{ contato.categoria }}</dd>
+
+      <dt>Descrição</dt>
+      <dd>{{ contato.descricao }}</dd>
+    </dl>
+
+    <a href="{% url 'edit-contact' contato.id %}" class="btn btn-primary">
+      Editar contato
+    </a>
+
   {% endif %}
-  
-  <h1 class="mt-5" style="margin-top:15px!important">{{ contato.nome }} {{ contato.sobrenome }}</h1>
-  <dl>
 
-    <dt>Telefone</dt>
-    <dd>{{ contato.telefone }}</dd>
-
-    <dt>E-mail</dt>
-    <dd>{{ contato.email }}</dd>
-
-    <dt>Data criação</dt>
-    <dd>{{ contato.data_criacao|date:'d/m/y H:i:s'  }}</dd>
-
-    <dt>Categoria</dt>
-    <dd>{{ contato.categoria }}</dd>
-
-    <dt>Descrição</dt>
-    <dd>
-      {{ contato.descricao }}
-    </dd>
-  </dl>
 {% endblock %}
