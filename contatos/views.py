@@ -111,7 +111,7 @@ def edit_contact(request, contact_id=0):
     contato.created_by = request.POST.get('created_by') if request.POST.get(
         'created_by') else contato.created_by
     contato.mostrar = mostrar
-    contato.foto = request.FILES.foto if request.FILES.foto else contato.foto
+    contato.foto = request.FILES['foto'] if request.FILES else contato.foto
 
     contato.save()
     messages.success(request, 'Contato atualizado com sucesso!')
