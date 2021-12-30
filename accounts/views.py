@@ -4,7 +4,7 @@ from django.core.validators import validate_email
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from .models import ContatoForm, CategoriaForm
-from contatos.models import Contato
+from contatos.models import Contato, Categoria
 from django.http import Http404
 
 import re
@@ -96,6 +96,16 @@ def register(request):
     user = User.objects.create_user(
         username=usuario, email=email, password=senha, first_name=nome, last_name=sobrenome)
     user.save()
+    user.refresh_from_db()
+
+    categorias_iniciais = ['Família', 'Amigos', 'Trabalho']
+    for category in categorias_iniciais:
+        usuario = User.objects.get(username=usuario)
+        form_categoria = Categoria()
+        form_categoria.nome = category
+        form_categoria.created_by = usuario
+
+        form_categoria.save()
 
     return redirect('login')
 
@@ -134,7 +144,6 @@ def create_contact(request):
 @login_required(redirect_field_name='login')
 def create_category(request):
     if request.method == 'POST':
-        form_categoria = CategoriaForm
         form_categoria = CategoriaForm(
             request.POST, initial={'created_by': request.user})
 
